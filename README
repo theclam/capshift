@@ -1,0 +1,42 @@
+capshift v0.1 Alpha
+Written by Foeh Mannay, January 2015
+
+PURPOSE
+=======
+
+"capshift" is a tool which re-writes the timestamps of pcap files. This is useful when
+you have two pcap files taken from different devices whose clocks are not synchronised
+and you can't be bothered to repeatedly hand-correct the timestamps.
+
+Please see http://networkingbodges.blogspot.com/ for more information on this if you 
+are interested.
+
+INSTALLATION
+============
+
+For Linux / Mac / MinGW it should be possible to build from source using:
+
+gcc -o capshift capshift.c
+
+I will make some binaries available for convenience but I make no assurances that I will
+keep them up to date.
+
+USAGE
+=====
+
+There are only three parameters and all are mandatory. You must specify your
+input capture file (original pcap format) with the -r flag, your output capture file
+with the -w flag and your time offset with the -o flag. Here's an example:
+
+Harrys-MacBook-Air:stripe foeh$ ./capshift -r original.cap -w shifted.cap -o +14.5
+
+Parsing capfile, attempting to shift forward by 14.5s...
+
+45 frames processed.
+Harrys-MacBook-Air:stripe foeh$
+
+CHANGE LOG
+==========
+
+v0.1a	First working release.
+
