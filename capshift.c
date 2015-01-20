@@ -101,7 +101,11 @@ int parse_pcap(FILE *capfile, FILE *outfile, long sign, long secs, long usecs){
 	int					count = 0;
 	pcaprec_hdr_t		*rechdr = NULL;
 	
-	printf("\nParsing capfile...\n");
+	if(sign == ADD) {
+		printf("\nParsing capfile, attempting to shift forward by %ld.%ld seconds...\n", secs, usecs);
+	} else {
+		printf("\nParsing capfile, attempting to shift backward by %ld.%ld seconds...\n", secs, usecs);
+	}
 	
 	// Start parsing the capture file:
 	rewind(capfile);
