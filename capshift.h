@@ -1,46 +1,5 @@
-
-
-#define CHAP_NONE '\x00'
-#define CHAP_CHALLENGE '\x01'
-#define CHAP_RESPONSE '\x02'
-#define CHAP_BOTH '\x03'
-#define ETHERNET '\x01'
-#define VLAN '\x02'
-#define MPLS '\x03'
-#define PPPoE '\x04'
-#define PPP '\x05'
-#define CHAP '\x06'
-#define IPv4 '\x07'
-#define UDP '\x08'
-#define RADIUS '\x09'
-#define RADAVP '\x0a'
-#define L2TP '\x0b'
-#define L2AVP '\x0c'
-#define OSPFv2 '\x0d'
-#define OSPF_MD5 '\x0e'
-#define TCP '\x0f'
-#define IP_MD5 '\x10'
-#define UNKNOWN '\x11'
-#define GRE '\x12'
-#define GTP '\x13'
-
-#define CHECKSUM_PRESENT '\x80'
-#define ROUTING_PRESENT '\x40'
-#define KEY_PRESENT '\x20'
-#define SEQUENCE_PRESENT '\x10'
-
-#define PADDING "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-
 #define ADD 1
 #define SUBTRACT -1
-
-typedef struct frame_s {
-// A data type to store the bits we need to construct a simple frame from a more complex one.
-	char 		*ether;
-	char		*payload;
-	unsigned int	plen;
-	char 		etype[2];
-} frame_t;
 
 typedef unsigned int guint32;
 typedef unsigned short guint16;

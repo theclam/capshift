@@ -57,6 +57,7 @@ params_t *parseParams(int argc, char *argv[]){
 	// Try to parse the time offset string
 	if(timestring == NULL) return NULL;
 	
+	// If there is a + or - present, set the sign accordingly
 	switch(timestring[0]){
 		case '-':
 			parameters->sign = SUBTRACT;
@@ -67,9 +68,13 @@ params_t *parseParams(int argc, char *argv[]){
 			timestring++;
 			break;
 	}
+	
+	// If there are non-numeric characters present, bail out
 	if((timestring[0] < '0') || (timestring[0] > '9')) return(NULL);
 	
+	// Grab the seconds
 	parameters->secs = strtol(timestring, &endptr, 10);
+	// Look for a decimal point, if present then grab and scale out microseconds
 	if(endptr[0] == '.'){
 		timestring = endptr + 1;
 		parameters->usecs = strtol(timestring, &endptr, 10);
@@ -84,14 +89,10 @@ params_t *parseParams(int argc, char *argv[]){
 			parameters->usecs /= 10;
 			i--;
 		}
-
 	} else parameters->usecs = 0;
 	
 	if(endptr[0] != '\x00') return(NULL);
 
-
-	printf("Got parameters infile = %s, outfile = %s, sign = %ld, secs = %ld, usecs = %ld.\n", parameters->infile, parameters->outfile, parameters->sign, parameters->secs, parameters->usecs);
-	
 	return(parameters);
 }
 
@@ -176,16 +177,17 @@ int parse_pcap(FILE *capfile, FILE *outfile, long sign, long secs, long usecs){
 			printf("Error: Could not allocate memory for pcap data!\n");
 			return(count);
 		}
-		// Get the actual packet data and attempt to parse it
+		// Get the actual packet data and copy it verbatim
 		if(fread (memblock, 1, caplen, capfile) != caplen){
 			printf("Error: Truncated pcap file reading capture!\n");
 			break;
 		}
-								
+		// Write the adjusted packet header
 		if(fwrite(rechdr, 1, sizeof(pcaprec_hdr_t), outfile) != sizeof(pcaprec_hdr_t)){
 			printf("Error: unable to write pcap record header to output file!\n");				
 			return(0);
 		}
+		// Write the packet data
 		if(fwrite(memblock, 1, caplen, outfile) != caplen){
 			printf("Error: unable to write frame to output pcap file\n");
 			return(0);
@@ -216,12 +218,13 @@ int main(int argc, char *argv[]){
 		return(1);
 	}
 	
-	// Attempt to open the capture file and word list:
+	// Attempt to open the input capture file for reading:
 	infile = fopen(parameters->infile,"rb");
 	if (infile == NULL) {
 		printf("\nError!\nUnable to open input capture file!\n");
 		return(1);
 	}
+	// Attempt to open the output capture file for writing:
 	outfile = fopen(parameters->outfile, "wb");
 	if(outfile == NULL){
 		printf("Error - could not open output file!\n");
